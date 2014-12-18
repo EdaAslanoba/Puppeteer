@@ -1,0 +1,2963 @@
+
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node {
+  cursor: pointer;
+}
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font: 10px sans-serif;
+}
+
+/*.node:not(:hover) .nodetext {
+  display: none;
+}*/
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+.container { border:2px solid #ccc; width:auto; height: 250px; overflow-y: scroll; overflow-x: scroll; }
+
+label {
+ display:block; 
+}
+
+label:hover {
+ background:lightsteelblue;
+ cursor:text;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+
+<p> Click on a resource to see where it's located or Make a search<br>
+<br>
+      <input type="text" id="search">
+      <button onclick="searchByName()">Search by name</button>
+	  <button onclick="searchByLabel()">Search by label</button>
+</p>	
+<!--<div class="container" id="container">-->
+<form>
+<div class="container" id="container"></div>
+<!--<div> <button onclick="getCheckedResources()">See URLs</button>-->
+</form>
+
+
+<script>
+var jsonTxt =
+{
+	"name" : "CIDAR",
+"label" : "00000000",
+	"children" : [
+{
+	"name" : "PHO338",
+"label" : "00000001",
+	"children" : [
+{
+	"name" : "ENZYME_BOX[A0000300]",
+"label" : "A0000300"
+},
+{
+	"name" : "ENZYME_BOX[C0000300]",
+"label" : "C0000300"
+},
+{
+	"name" : "ENZYME_BOX[00000300]",
+"label" : "00000300",
+	"children" : [
+{
+	"name" : "BSAI[A0000309]",
+"label" : "A0000309"
+},
+{
+	"name" : "BSAI[00000309]",
+"label" : "00000309"
+},
+{
+	"name" : "LIGASE_BUFFER[5D000312]",
+"label" : "5D000312"
+},
+{
+	"name" : "LIGASE_BUFFER[5C000312]",
+"label" : "5C000312"
+},
+{
+	"name" : "LIGASE_BUFFER[5B000312]",
+"label" : "5B000312"
+},
+{
+	"name" : "LIGASE_BUFFER[5A000312]",
+"label" : "5A000312"
+},
+{
+	"name" : "BSAI[B0000309]",
+"label" : "B0000309"
+},
+{
+	"name" : "BSAI[D0000309]",
+"label" : "D0000309"
+},
+{
+	"name" : "SPEI",
+"label" : "00000307"
+},
+{
+	"name" : "PROMEGA_T4_LIGASE[5D000311]",
+"label" : "5D000311"
+},
+{
+	"name" : "PROMEGA_T4_LIGASE[5B000311]",
+"label" : "5B000311"
+},
+{
+	"name" : "PROMEGA_T4_LIGASE[5A000311]",
+"label" : "5A000311"
+},
+{
+	"name" : "PROMEGA_T4_LIGASE[50000311]",
+"label" : "50000311"
+}
+	]
+},
+{
+	"name" : "THERMOCYCLER_2[B0000039]",
+"label" : "B0000039"
+},
+{
+	"name" : "ENZYME_BOX[B0000300]",
+"label" : "B0000300"
+},
+{
+	"name" : "THERMOCYCLER_2[D0000039]",
+"label" : "D0000039"
+},
+{
+	"name" : "THERMOCYCLER_2[A0000039]",
+"label" : "A0000039"
+},
+{
+	"name" : "NICE_BOX[C0000168]",
+"label" : "C0000168"
+},
+{
+	"name" : "THERMOCYCLER_2[C0000039]",
+"label" : "C0000039"
+},
+{
+	"name" : "PIPETTE[00000047]",
+"label" : "00000047"
+},
+{
+	"name" : "NICE_BOX[B0000168]",
+"label" : "B0000168"
+},
+{
+	"name" : "ICE",
+"label" : "00000167"
+},
+{
+	"name" : "NICE_BOX[D0000168]",
+"label" : "D0000168"
+},
+{
+	"name" : "NICE_BOX[A0000168]",
+"label" : "A0000168"
+},
+{
+	"name" : "ENZYME_BOX[D0000300]",
+"label" : "D0000300"
+},
+{
+	"name" : "TUBE_RACK[A0000343]",
+"label" : "A0000343"
+},
+{
+	"name" : "PIPETTE_TIP",
+"label" : "00000286"
+},
+{
+	"name" : "PIPETTE[B0000047]",
+"label" : "B0000047"
+},
+{
+	"name" : "PIPETTE[A0000047]",
+"label" : "A0000047"
+},
+{
+	"name" : "PIPETTE[D0000047]",
+"label" : "D0000047"
+},
+{
+	"name" : "PIPETTE[C0000047]",
+"label" : "C0000047"
+},
+{
+	"name" : "STERILE_DIONIZED_WATER[A0000268]",
+"label" : "A0000268"
+},
+{
+	"name" : "STERILE_DIONIZED_WATER[00000268]",
+"label" : "00000268"
+},
+{
+	"name" : "MICROCENTRIFUGE_TUBE[00000292]",
+"label" : "00000292"
+},
+{
+	"name" : "STERILE_DIONIZED_WATER[D0000268]",
+"label" : "D0000268"
+},
+{
+	"name" : "MICROCENTRIFUGE_TUBE[B0000292]",
+"label" : "B0000292"
+},
+{
+	"name" : "MICROCENTRIFUGE_TUBE[A0000292]",
+"label" : "A0000292"
+},
+{
+	"name" : "MICROCENTRIFUGE_TUBE[D0000292]",
+"label" : "D0000292"
+},
+{
+	"name" : "MICROCENTRIFUGE_TUBE[C0000292]",
+"label" : "C0000292"
+},
+{
+	"name" : "NEG_20",
+"label" : "00000913",
+	"children" : [
+{
+	"name" : "COLD_PLATE",
+"label" : "10000913"
+},
+{
+	"name" : "PLATE[1Z000544]",
+"label" : "1Z000544",
+	"children" : [
+{
+	"name" : "WELL[1ZC00544]",
+"label" : "1ZC00544",
+	"children" : [
+{
+	"name" : "P_2_vector3398358113657128E8_SAMPLE",
+"label" : "7HKKZ604"
+}
+	]
+},
+{
+	"name" : "WELL[1ZB00544]",
+"label" : "1ZB00544"
+},
+{
+	"name" : "WELL[1ZE00544]",
+"label" : "1ZE00544"
+},
+{
+	"name" : "WELL[1ZD00544]",
+"label" : "1ZD00544"
+},
+{
+	"name" : "WELL[1ZA00544]",
+"label" : "1ZA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1B000544]",
+"label" : "1B000544",
+	"children" : [
+{
+	"name" : "WELL[1BD00544]",
+"label" : "1BD00544",
+	"children" : [
+{
+	"name" : "PROMEGA_T4_LIGASE",
+"label" : "5C000311"
+}
+	]
+},
+{
+	"name" : "WELL[1BE00544]",
+"label" : "1BE00544",
+	"children" : [
+{
+	"name" : "BSAI",
+"label" : "C0000309"
+}
+	]
+},
+{
+	"name" : "WELL[1BB00544]",
+"label" : "1BB00544",
+	"children" : [
+{
+	"name" : "STERILE_DIONIZED_WATER",
+"label" : "C0000268"
+}
+	]
+},
+{
+	"name" : "WELL[1BC00544]",
+"label" : "1BC00544",
+	"children" : [
+{
+	"name" : "LIGASE_BUFFER",
+"label" : "50000312"
+}
+	]
+},
+{
+	"name" : "WELL[1BA00544]",
+"label" : "1BA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1C000544]",
+"label" : "1C000544",
+	"children" : [
+{
+	"name" : "WELL[1CK00544]",
+"label" : "1CK00544",
+	"children" : [
+{
+	"name" : "P_2_vector3398358113657128E8_SAMPLE",
+"label" : "HU68X3YN"
+}
+	]
+},
+{
+	"name" : "WELL[1CH00544]",
+"label" : "1CH00544"
+},
+{
+	"name" : "WELL[1CJ00544]",
+"label" : "1CJ00544"
+},
+{
+	"name" : "WELL[1CF00544]",
+"label" : "1CF00544"
+},
+{
+	"name" : "WELL[1CG00544]",
+"label" : "1CG00544"
+},
+{
+	"name" : "WELL[1CD00544]",
+"label" : "1CD00544"
+},
+{
+	"name" : "WELL[1CE00544]",
+"label" : "1CE00544"
+},
+{
+	"name" : "WELL[1CB00544]",
+"label" : "1CB00544"
+},
+{
+	"name" : "WELL[1CC00544]",
+"label" : "1CC00544"
+},
+{
+	"name" : "WELL[1CA00544]",
+"label" : "1CA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1A000544]",
+"label" : "1A000544",
+	"children" : [
+{
+	"name" : "WELL[1AE00544]",
+"label" : "1AE00544",
+	"children" : [
+{
+	"name" : "mcrRobotOutput",
+"label" : "V4188U9J"
+}
+	]
+},
+{
+	"name" : "WELL[1AD00544]",
+"label" : "1AD00544",
+	"children" : [
+{
+	"name" : "B0034_SAMPLE",
+"label" : "H5GEXH6C"
+}
+	]
+},
+{
+	"name" : "WELL[1AA00544]",
+"label" : "1AA00544",
+	"children" : [
+{
+	"name" : "J23100_SAMPLE",
+"label" : "T9MD06M2"
+}
+	]
+},
+{
+	"name" : "WELL[1AC00544]",
+"label" : "1AC00544",
+	"children" : [
+{
+	"name" : "E0030_SAMPLE",
+"label" : "B0G9T0EU"
+}
+	]
+},
+{
+	"name" : "WELL[1AB00544]",
+"label" : "1AB00544",
+	"children" : [
+{
+	"name" : "B0015_SAMPLE",
+"label" : "KS62E04M"
+}
+	]
+}
+	]
+},
+{
+	"name" : "PLATE[1Y000544]",
+"label" : "1Y000544",
+	"children" : [
+{
+	"name" : "WELL[1YA00544]",
+"label" : "1YA00544",
+	"children" : [
+{
+	"name" : "mcrRobotOutput",
+"label" : "2TQ2HUEP"
+}
+	]
+},
+{
+	"name" : "WELL[1YB00544]",
+"label" : "1YB00544",
+	"children" : [
+{
+	"name" : "J23100_SAMPLE",
+"label" : "HWACE6NT"
+}
+	]
+},
+{
+	"name" : "WELL[1YC00544]",
+"label" : "1YC00544",
+	"children" : [
+{
+	"name" : "E0030_SAMPLE",
+"label" : "D7AGK3TA"
+}
+	]
+},
+{
+	"name" : "WELL[1YE00544]",
+"label" : "1YE00544",
+	"children" : [
+{
+	"name" : "B0015_SAMPLE",
+"label" : "14CBFL78"
+}
+	]
+},
+{
+	"name" : "WELL[1YD00544]",
+"label" : "1YD00544",
+	"children" : [
+{
+	"name" : "B0032_SAMPLE",
+"label" : "3JVK369R"
+}
+	]
+}
+	]
+},
+{
+	"name" : "DNA_PLATE",
+"label" : "10000444",
+	"children" : [
+{
+	"name" : "WELL[40000111]",
+"label" : "40000111",
+	"children" : [
+{
+	"name" : "P_2_vector3398358113657128E8_SAMPLE",
+"label" : "BXCAK4R7"
+}
+	]
+},
+{
+	"name" : "WELL[10000111]",
+"label" : "10000111"
+},
+{
+	"name" : "WELL[20000111]",
+"label" : "20000111"
+},
+{
+	"name" : "WELL[70000111]",
+"label" : "70000111"
+},
+{
+	"name" : "WELL[30000111]",
+"label" : "30000111"
+},
+{
+	"name" : "WELL[A0000114]",
+"label" : "A0000114"
+},
+{
+	"name" : "WELL[A0000115]",
+"label" : "A0000115"
+},
+{
+	"name" : "WELL[A0000116]",
+"label" : "A0000116"
+},
+{
+	"name" : "WELL[90000111]",
+"label" : "90000111"
+},
+{
+	"name" : "WELL[A0000111]",
+"label" : "A0000111"
+},
+{
+	"name" : "WELL[A0000112]",
+"label" : "A0000112"
+},
+{
+	"name" : "WELL[A0000113]",
+"label" : "A0000113"
+},
+{
+	"name" : "WELL[00000111]",
+"label" : "00000111"
+},
+{
+	"name" : "WELL[60000111]",
+"label" : "60000111"
+},
+{
+	"name" : "WELL[50000111]",
+"label" : "50000111"
+},
+{
+	"name" : "WELL[80000111]",
+"label" : "80000111"
+}
+	]
+},
+{
+	"name" : "ENZYME_BUFFER_PLATE",
+"label" : "10000544",
+	"children" : [
+{
+	"name" : "WELL[90000511]",
+"label" : "90000511",
+	"children" : [
+{
+	"name" : "mcrRobotOutput",
+"label" : "4X4MKH89"
+}
+	]
+},
+{
+	"name" : "WELL[90000512]",
+"label" : "90000512",
+	"children" : [
+{
+	"name" : "J23100_SAMPLE",
+"label" : "RBK9BEEZ"
+}
+	]
+},
+{
+	"name" : "WELL[90000513]",
+"label" : "90000513",
+	"children" : [
+{
+	"name" : "E0030_SAMPLE",
+"label" : "N7UPVJY7"
+}
+	]
+},
+{
+	"name" : "WELL[90000514]",
+"label" : "90000514",
+	"children" : [
+{
+	"name" : "B0015_SAMPLE",
+"label" : "LNL75G00"
+}
+	]
+},
+{
+	"name" : "WELL[90000515]",
+"label" : "90000515",
+	"children" : [
+{
+	"name" : "34m1_SAMPLE",
+"label" : "UJJDPXXM"
+}
+	]
+}
+	]
+}
+	]
+},
+{
+	"name" : "4C_ROOM",
+"label" : "00000010"
+},
+{
+	"name" : "THERMOCYCLER_2[00000039]",
+"label" : "00000039"
+},
+{
+	"name" : "BIG_-20C",
+"label" : "00000013"
+},
+{
+	"name" : "ALEJANDRO",
+"label" : "00000003",
+	"children" : [
+{
+	"name" : "PLATE[1D000544]",
+"label" : "1D000544",
+	"children" : [
+{
+	"name" : "WELL[1DA00544]",
+"label" : "1DA00544"
+},
+{
+	"name" : "WELL[1DD00544]",
+"label" : "1DD00544"
+},
+{
+	"name" : "WELL[1DE00544]",
+"label" : "1DE00544"
+},
+{
+	"name" : "WELL[1DB00544]",
+"label" : "1DB00544"
+},
+{
+	"name" : "WELL[1DC00544]",
+"label" : "1DC00544"
+}
+	]
+},
+{
+	"name" : "PETRI_DISH",
+"label" : "C0000003",
+	"children" : [
+{
+	"name" : "gel_output",
+"label" : "0A000181"
+}
+	]
+},
+{
+	"name" : "GEL_TRAY",
+"label" : "00000181"
+},
+{
+	"name" : "GEL_TANK",
+"label" : "00000365"
+},
+{
+	"name" : "LADDER",
+"label" : "00000193"
+},
+{
+	"name" : "REACTION_PLATE",
+"label" : "20000544",
+	"children" : [
+{
+	"name" : "WELL[20000518]",
+"label" : "20000518"
+},
+{
+	"name" : "WELL[20000517]",
+"label" : "20000517"
+},
+{
+	"name" : "WELL[20000516]",
+"label" : "20000516"
+},
+{
+	"name" : "WELL[20000515]",
+"label" : "20000515"
+},
+{
+	"name" : "WELL[20000514]",
+"label" : "20000514"
+},
+{
+	"name" : "WELL[20000510]",
+"label" : "20000510"
+},
+{
+	"name" : "WELL[20000511]",
+"label" : "20000511"
+},
+{
+	"name" : "WELL[20000512]",
+"label" : "20000512"
+},
+{
+	"name" : "WELL[20000519]",
+"label" : "20000519"
+},
+{
+	"name" : "WELL[20000513]",
+"label" : "20000513"
+}
+	]
+},
+{
+	"name" : "LOADING_BUFFER",
+"label" : "00000077"
+},
+{
+	"name" : "PLATE[1L000544]",
+"label" : "1L000544",
+	"children" : [
+{
+	"name" : "WELL[1LA00544]",
+"label" : "1LA00544"
+},
+{
+	"name" : "WELL[1LB00544]",
+"label" : "1LB00544"
+},
+{
+	"name" : "WELL[1LC00544]",
+"label" : "1LC00544"
+},
+{
+	"name" : "WELL[1LD00544]",
+"label" : "1LD00544"
+},
+{
+	"name" : "WELL[1LE00544]",
+"label" : "1LE00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1J000544]",
+"label" : "1J000544",
+	"children" : [
+{
+	"name" : "WELL[1JA00544]",
+"label" : "1JA00544"
+},
+{
+	"name" : "WELL[1JE00544]",
+"label" : "1JE00544"
+},
+{
+	"name" : "WELL[1JD00544]",
+"label" : "1JD00544"
+},
+{
+	"name" : "WELL[1JC00544]",
+"label" : "1JC00544"
+},
+{
+	"name" : "WELL[1JB00544]",
+"label" : "1JB00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1H000544]",
+"label" : "1H000544",
+	"children" : [
+{
+	"name" : "WELL[1HA00544]",
+"label" : "1HA00544"
+},
+{
+	"name" : "WELL[1HB00544]",
+"label" : "1HB00544"
+},
+{
+	"name" : "WELL[1HC00544]",
+"label" : "1HC00544"
+},
+{
+	"name" : "WELL[1HD00544]",
+"label" : "1HD00544"
+},
+{
+	"name" : "WELL[1HE00544]",
+"label" : "1HE00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1G000544]",
+"label" : "1G000544",
+	"children" : [
+{
+	"name" : "WELL[1GD00544]",
+"label" : "1GD00544"
+},
+{
+	"name" : "WELL[1GE00544]",
+"label" : "1GE00544"
+},
+{
+	"name" : "WELL[1GA00544]",
+"label" : "1GA00544"
+},
+{
+	"name" : "WELL[1GC00544]",
+"label" : "1GC00544"
+},
+{
+	"name" : "WELL[1GB00544]",
+"label" : "1GB00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1E000544]",
+"label" : "1E000544",
+	"children" : [
+{
+	"name" : "WELL[1EA00544]",
+"label" : "1EA00544"
+},
+{
+	"name" : "WELL[1EC00544]",
+"label" : "1EC00544"
+},
+{
+	"name" : "WELL[1EB00544]",
+"label" : "1EB00544"
+},
+{
+	"name" : "WELL[1EE00544]",
+"label" : "1EE00544"
+},
+{
+	"name" : "WELL[1ED00544]",
+"label" : "1ED00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1F000544]",
+"label" : "1F000544",
+	"children" : [
+{
+	"name" : "WELL[1FC00544]",
+"label" : "1FC00544"
+},
+{
+	"name" : "WELL[1FB00544]",
+"label" : "1FB00544"
+},
+{
+	"name" : "WELL[1FE00544]",
+"label" : "1FE00544"
+},
+{
+	"name" : "WELL[1FD00544]",
+"label" : "1FD00544"
+},
+{
+	"name" : "WELL[1FA00544]",
+"label" : "1FA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1P000544]",
+"label" : "1P000544",
+	"children" : [
+{
+	"name" : "WELL[1PB00544]",
+"label" : "1PB00544"
+},
+{
+	"name" : "WELL[1PC00544]",
+"label" : "1PC00544"
+},
+{
+	"name" : "WELL[1PA00544]",
+"label" : "1PA00544"
+},
+{
+	"name" : "WELL[1PE00544]",
+"label" : "1PE00544"
+},
+{
+	"name" : "WELL[1PD00544]",
+"label" : "1PD00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1N000544]",
+"label" : "1N000544",
+	"children" : [
+{
+	"name" : "WELL[1ND00544]",
+"label" : "1ND00544"
+},
+{
+	"name" : "WELL[1NE00544]",
+"label" : "1NE00544"
+},
+{
+	"name" : "WELL[1NB00544]",
+"label" : "1NB00544"
+},
+{
+	"name" : "WELL[1NC00544]",
+"label" : "1NC00544"
+},
+{
+	"name" : "WELL[1NA00544]",
+"label" : "1NA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1M000544]",
+"label" : "1M000544",
+	"children" : [
+{
+	"name" : "WELL[1MD00544]",
+"label" : "1MD00544"
+},
+{
+	"name" : "WELL[1ME00544]",
+"label" : "1ME00544"
+},
+{
+	"name" : "WELL[1MB00544]",
+"label" : "1MB00544"
+},
+{
+	"name" : "WELL[1MC00544]",
+"label" : "1MC00544"
+},
+{
+	"name" : "WELL[1MA00544]",
+"label" : "1MA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1Q000544]",
+"label" : "1Q000544",
+	"children" : [
+{
+	"name" : "WELL[1QE00544]",
+"label" : "1QE00544"
+},
+{
+	"name" : "WELL[1QD00544]",
+"label" : "1QD00544"
+},
+{
+	"name" : "WELL[1QC00544]",
+"label" : "1QC00544"
+},
+{
+	"name" : "WELL[1QB00544]",
+"label" : "1QB00544"
+},
+{
+	"name" : "WELL[1QA00544]",
+"label" : "1QA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1K000544]",
+"label" : "1K000544",
+	"children" : [
+{
+	"name" : "WELL[1KE00544]",
+"label" : "1KE00544"
+},
+{
+	"name" : "WELL[1KD00544]",
+"label" : "1KD00544"
+},
+{
+	"name" : "WELL[1KC00544]",
+"label" : "1KC00544"
+},
+{
+	"name" : "WELL[1KB00544]",
+"label" : "1KB00544"
+},
+{
+	"name" : "WELL[1KA00544]",
+"label" : "1KA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1V000544]",
+"label" : "1V000544",
+	"children" : [
+{
+	"name" : "WELL[1VB00544]",
+"label" : "1VB00544"
+},
+{
+	"name" : "WELL[1VC00544]",
+"label" : "1VC00544"
+},
+{
+	"name" : "WELL[1VD00544]",
+"label" : "1VD00544"
+},
+{
+	"name" : "WELL[1VE00544]",
+"label" : "1VE00544"
+},
+{
+	"name" : "WELL[1VA00544]",
+"label" : "1VA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1U000544]",
+"label" : "1U000544",
+	"children" : [
+{
+	"name" : "WELL[1UD00544]",
+"label" : "1UD00544"
+},
+{
+	"name" : "WELL[1UE00544]",
+"label" : "1UE00544"
+},
+{
+	"name" : "WELL[1UA00544]",
+"label" : "1UA00544"
+},
+{
+	"name" : "WELL[1UB00544]",
+"label" : "1UB00544"
+},
+{
+	"name" : "WELL[1UC00544]",
+"label" : "1UC00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1T000544]",
+"label" : "1T000544",
+	"children" : [
+{
+	"name" : "WELL[1TB00544]",
+"label" : "1TB00544"
+},
+{
+	"name" : "WELL[1TC00544]",
+"label" : "1TC00544"
+},
+{
+	"name" : "WELL[1TD00544]",
+"label" : "1TD00544"
+},
+{
+	"name" : "WELL[1TE00544]",
+"label" : "1TE00544"
+},
+{
+	"name" : "WELL[1TA00544]",
+"label" : "1TA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1S000544]",
+"label" : "1S000544",
+	"children" : [
+{
+	"name" : "WELL[1SE00544]",
+"label" : "1SE00544"
+},
+{
+	"name" : "WELL[1SD00544]",
+"label" : "1SD00544"
+},
+{
+	"name" : "WELL[1SA00544]",
+"label" : "1SA00544"
+},
+{
+	"name" : "WELL[1SC00544]",
+"label" : "1SC00544"
+},
+{
+	"name" : "WELL[1SB00544]",
+"label" : "1SB00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1R000544]",
+"label" : "1R000544",
+	"children" : [
+{
+	"name" : "WELL[1RC00544]",
+"label" : "1RC00544"
+},
+{
+	"name" : "WELL[1RB00544]",
+"label" : "1RB00544"
+},
+{
+	"name" : "WELL[1RE00544]",
+"label" : "1RE00544"
+},
+{
+	"name" : "WELL[1RD00544]",
+"label" : "1RD00544"
+},
+{
+	"name" : "WELL[1RA00544]",
+"label" : "1RA00544"
+}
+	]
+},
+{
+	"name" : "SEQ_FILE",
+"label" : "1A000444"
+},
+{
+	"name" : "CAJA_DE_PLASMIDO",
+"label" : "00000334",
+	"children" : [
+{
+	"name" : "leader16_SAMPLE",
+"label" : "QV8HNY01"
+},
+{
+	"name" : "leader2_SAMPLE",
+"label" : "GRN291KL"
+},
+{
+	"name" : "leader1_SAMPLE",
+"label" : "E00MS25G"
+},
+{
+	"name" : "leader8_SAMPLE",
+"label" : "XDPC0GF6"
+},
+{
+	"name" : "B0015_SAMPLE",
+"label" : "1QWCD5TW"
+},
+{
+	"name" : "DVL1_SAMPLE",
+"label" : "K4SRZRTD"
+},
+{
+	"name" : "B0032_SAMPLE",
+"label" : "FY4TWXTP"
+},
+{
+	"name" : "leader13_SAMPLE",
+"label" : "YPBFU7UZ"
+},
+{
+	"name" : "leader12_SAMPLE",
+"label" : "18VK6V2S"
+},
+{
+	"name" : "34m2_SAMPLE",
+"label" : "TY8Z8074"
+},
+{
+	"name" : "J23100_SAMPLE",
+"label" : "5M6AWNLP"
+},
+{
+	"name" : "E0030_SAMPLE",
+"label" : "73DRJM86"
+}
+	]
+},
+{
+	"name" : "CRYOTUBES",
+"label" : "00000137",
+	"children" : [
+{
+	"name" : "CRYOVIAL_TUBE[30000197]",
+"label" : "30000197"
+},
+{
+	"name" : "CRYOVIAL_TUBE[20000197]",
+"label" : "20000197"
+},
+{
+	"name" : "CRYOVIAL_TUBE[50000197]",
+"label" : "50000197"
+},
+{
+	"name" : "CRYOVIAL_TUBE[40000197]",
+"label" : "40000197"
+},
+{
+	"name" : "CRYOVIAL_TUBE[10000197]",
+"label" : "10000197"
+},
+{
+	"name" : "CRYOVIAL_TUBE[00000197]",
+"label" : "00000197"
+},
+{
+	"name" : "CRYOVIAL_TUBE[60000197]",
+"label" : "60000197"
+},
+{
+	"name" : "CRYOVIAL_TUBE[70000197]",
+"label" : "70000197"
+},
+{
+	"name" : "CRYOVIAL_TUBE[80000197]",
+"label" : "80000197"
+},
+{
+	"name" : "CRYOVIAL_TUBE[90000197]",
+"label" : "90000197"
+}
+	]
+},
+{
+	"name" : "MOCLO_GLYCEROL[B0000320]",
+"label" : "B0000320"
+},
+{
+	"name" : "MOCLO_GLYCEROL[A0000320]",
+"label" : "A0000320"
+},
+{
+	"name" : "MOCLO_GLYCEROL[00000320]",
+"label" : "00000320"
+},
+{
+	"name" : "PLATE[1X000544]",
+"label" : "1X000544",
+	"children" : [
+{
+	"name" : "WELL[1XB00544]",
+"label" : "1XB00544"
+},
+{
+	"name" : "WELL[1XC00544]",
+"label" : "1XC00544"
+},
+{
+	"name" : "WELL[1XD00544]",
+"label" : "1XD00544"
+},
+{
+	"name" : "WELL[1XE00544]",
+"label" : "1XE00544"
+},
+{
+	"name" : "WELL[1XA00544]",
+"label" : "1XA00544"
+}
+	]
+},
+{
+	"name" : "PLATE[1W000544]",
+"label" : "1W000544",
+	"children" : [
+{
+	"name" : "WELL[1WD00544]",
+"label" : "1WD00544"
+},
+{
+	"name" : "WELL[1WE00544]",
+"label" : "1WE00544"
+},
+{
+	"name" : "WELL[1WA00544]",
+"label" : "1WA00544"
+},
+{
+	"name" : "WELL[1WB00544]",
+"label" : "1WB00544"
+},
+{
+	"name" : "WELL[1WC00544]",
+"label" : "1WC00544"
+}
+	]
+}
+	]
+},
+{
+	"name" : "DENISE",
+"label" : "A0000003"
+},
+{
+	"name" : "NICE_BOX[00000168]",
+"label" : "00000168"
+},
+{
+	"name" : "EDA",
+"label" : "00000002",
+	"children" : [
+{
+	"name" : "COLLECTION_TUBES",
+"label" : "00000151",
+	"children" : [
+{
+	"name" : "COLLECTION_TUBE[80000152]",
+"label" : "80000152"
+},
+{
+	"name" : "COLLECTION_TUBE[70000152]",
+"label" : "70000152"
+},
+{
+	"name" : "COLLECTION_TUBE[00000152]",
+"label" : "00000152"
+},
+{
+	"name" : "COLLECTION_TUBE[90000152]",
+"label" : "90000152"
+},
+{
+	"name" : "COLLECTION_TUBE[20000152]",
+"label" : "20000152"
+},
+{
+	"name" : "COLLECTION_TUBE[10000152]",
+"label" : "10000152"
+},
+{
+	"name" : "COLLECTION_TUBE[40000152]",
+"label" : "40000152"
+},
+{
+	"name" : "COLLECTION_TUBE[30000152]",
+"label" : "30000152"
+},
+{
+	"name" : "COLLECTION_TUBE[60000152]",
+"label" : "60000152"
+},
+{
+	"name" : "COLLECTION_TUBE[50000152]",
+"label" : "50000152"
+}
+	]
+},
+{
+	"name" : "IGEM_MINIPREP_KIT",
+"label" : "00000058",
+	"children" : [
+{
+	"name" : "IGEM_MX3_BUFFER",
+"label" : "00000338"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[00000341]",
+"label" : "00000341"
+},
+{
+	"name" : "IGEM_WS_BUFFER",
+"label" : "00000340"
+},
+{
+	"name" : "IGEM_MX2_BUFFER",
+"label" : "00000337"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[70000341]",
+"label" : "70000341"
+},
+{
+	"name" : "IGEM_WN_BUFFER",
+"label" : "00000339"
+},
+{
+	"name" : "LAB_MX1_BUFFER",
+"label" : "00000012"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[60000341]",
+"label" : "60000341"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[30000341]",
+"label" : "30000341"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[80000341]",
+"label" : "80000341"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[50000341]",
+"label" : "50000341"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[20000341]",
+"label" : "20000341"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[90000341]",
+"label" : "90000341"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[40000341]",
+"label" : "40000341"
+},
+{
+	"name" : "IGEM_ELUTION_BUFFER[10000341]",
+"label" : "10000341"
+}
+	]
+},
+{
+	"name" : "SPARE_TOOTHPICK",
+"label" : "00000125"
+},
+{
+	"name" : "LB_BROTH_CONTAINER",
+"label" : "0A000002",
+	"children" : [
+{
+	"name" : "LB_BROTH[00000100]",
+"label" : "00000100"
+},
+{
+	"name" : "LB_BROTH[A0000100]",
+"label" : "A0000100"
+},
+{
+	"name" : "LB_BROTH[B0000100]",
+"label" : "B0000100"
+}
+	]
+},
+{
+	"name" : "BUFFER_TUBE_RACK",
+"label" : "00000343",
+	"children" : [
+{
+	"name" : "BSA_BUFFER[00000187]",
+"label" : "00000187"
+},
+{
+	"name" : "NEB_BUFFER_2",
+"label" : "00000186"
+},
+{
+	"name" : "NEB_BUFFER_4[A0000332]",
+"label" : "A0000332"
+},
+{
+	"name" : "NEB_BUFFER_4[00000332]",
+"label" : "00000332"
+},
+{
+	"name" : "NEB_BUFFER_3",
+"label" : "00000331"
+},
+{
+	"name" : "BSA_BUFFER[A0000187]",
+"label" : "A0000187"
+},
+{
+	"name" : "NEB_BUFFER_4[B0000332]",
+"label" : "B0000332"
+}
+	]
+},
+{
+	"name" : "SPIN_COLUMNS",
+"label" : "00000063",
+	"children" : [
+{
+	"name" : "SPIN_COLUMN[70000064]",
+"label" : "70000064"
+},
+{
+	"name" : "SPIN_COLUMN[80000064]",
+"label" : "80000064"
+},
+{
+	"name" : "SPIN_COLUMN[50000064]",
+"label" : "50000064"
+},
+{
+	"name" : "SPIN_COLUMN[60000064]",
+"label" : "60000064"
+},
+{
+	"name" : "SPIN_COLUMN[00000064]",
+"label" : "00000064"
+},
+{
+	"name" : "SPIN_COLUMN[90000064]",
+"label" : "90000064"
+},
+{
+	"name" : "SPIN_COLUMN[20000064]",
+"label" : "20000064"
+},
+{
+	"name" : "SPIN_COLUMN[10000064]",
+"label" : "10000064"
+},
+{
+	"name" : "SPIN_COLUMN[40000064]",
+"label" : "40000064"
+},
+{
+	"name" : "SPIN_COLUMN[30000064]",
+"label" : "30000064"
+}
+	]
+},
+{
+	"name" : "READER",
+"label" : "00000333"
+},
+{
+	"name" : "SEROLOGICAL_PIPETTE[00000136]",
+"label" : "00000136"
+},
+{
+	"name" : "SEROLOGICAL_PIPETTES_SUCTION_DEVICE[B0000218]",
+"label" : "B0000218"
+},
+{
+	"name" : "CULTURE_TUBES",
+"label" : "00000134",
+	"children" : [
+{
+	"name" : "CULTURE_TUBE[9E000138]",
+"label" : "9E000138"
+},
+{
+	"name" : "CULTURE_TUBE[9A000138]",
+"label" : "9A000138"
+},
+{
+	"name" : "CULTURE_TUBE[9B000138]",
+"label" : "9B000138"
+},
+{
+	"name" : "CULTURE_TUBE[9C000138]",
+"label" : "9C000138"
+},
+{
+	"name" : "CULTURE_TUBE[9D000138]",
+"label" : "9D000138"
+},
+{
+	"name" : "CULTURE_TUBE[50000138]",
+"label" : "50000138"
+},
+{
+	"name" : "CULTURE_TUBE[80000138]",
+"label" : "80000138"
+},
+{
+	"name" : "CULTURE_TUBE[70000138]",
+"label" : "70000138"
+},
+{
+	"name" : "CULTURE_TUBE[90000138]",
+"label" : "90000138"
+},
+{
+	"name" : "CULTURE_TUBE[60000138]",
+"label" : "60000138"
+},
+{
+	"name" : "CULTURE_TUBE[30000138]",
+"label" : "30000138"
+},
+{
+	"name" : "CULTURE_TUBE[40000138]",
+"label" : "40000138"
+},
+{
+	"name" : "CULTURE_TUBE[10000138]",
+"label" : "10000138"
+},
+{
+	"name" : "CULTURE_TUBE[20000138]",
+"label" : "20000138"
+},
+{
+	"name" : "CULTURE_TUBE[90000137]",
+"label" : "90000137"
+},
+{
+	"name" : "CULTURE_TUBE[00000138]",
+"label" : "00000138"
+},
+{
+	"name" : "CULTURE_TUBE[70000137]",
+"label" : "70000137"
+},
+{
+	"name" : "CULTURE_TUBE[80000137]",
+"label" : "80000137"
+},
+{
+	"name" : "CULTURE_TUBE[50000137]",
+"label" : "50000137"
+},
+{
+	"name" : "CULTURE_TUBE[60000137]",
+"label" : "60000137"
+},
+{
+	"name" : "CULTURE_TUBE[40000137]",
+"label" : "40000137"
+},
+{
+	"name" : "CULTURE_TUBE[30000137]",
+"label" : "30000137"
+},
+{
+	"name" : "CULTURE_TUBE[20000137]",
+"label" : "20000137"
+},
+{
+	"name" : "CULTURE_TUBE[10000137]",
+"label" : "10000137"
+},
+{
+	"name" : "CULTURE_TUBE[0000A137]",
+"label" : "0000A137"
+}
+	]
+},
+{
+	"name" : "SEROLOGICAL_PIPETTES_SUCTION_DEVICE[00000218]",
+"label" : "00000218"
+},
+{
+	"name" : "SEROLOGICAL_PIPETTES_SUCTION_DEVICE[A0000218]",
+"label" : "A0000218"
+},
+{
+	"name" : "SEROLOGICAL_PIPETTE[B0000136]",
+"label" : "B0000136"
+},
+{
+	"name" : "SEROLOGICAL_PIPETTE[A0000136]",
+"label" : "A0000136"
+},
+{
+	"name" : "PETRI_DISH[70000363]",
+"label" : "70000363",
+	"children" : [
+{
+	"name" : "ticOutput",
+"label" : "96WRRSXP"
+}
+	]
+},
+{
+	"name" : "PETRI_DISH[20000363]",
+"label" : "20000363",
+	"children" : [
+{
+	"name" : "ticOutput",
+"label" : "MPFR260T"
+}
+	]
+},
+{
+	"name" : "PETRI_DISH[10000363]",
+"label" : "10000363",
+	"children" : [
+{
+	"name" : "ticOutput",
+"label" : "FETTWFN6"
+}
+	]
+},
+{
+	"name" : "PLATE[1Y000544]",
+"label" : "1Y000544",
+	"children" : [
+{
+	"name" : "WELL[1YA00544]",
+"label" : "1YA00544",
+	"children" : [
+{
+	"name" : "mcrRobotOutput",
+"label" : "2TQ2HUEP"
+}
+	]
+},
+{
+	"name" : "WELL[1YB00544]",
+"label" : "1YB00544",
+	"children" : [
+{
+	"name" : "J23100_SAMPLE",
+"label" : "HWACE6NT"
+}
+	]
+},
+{
+	"name" : "WELL[1YC00544]",
+"label" : "1YC00544",
+	"children" : [
+{
+	"name" : "E0030_SAMPLE",
+"label" : "D7AGK3TA"
+}
+	]
+},
+{
+	"name" : "WELL[1YE00544]",
+"label" : "1YE00544",
+	"children" : [
+{
+	"name" : "B0015_SAMPLE",
+"label" : "14CBFL78"
+}
+	]
+},
+{
+	"name" : "WELL[1YD00544]",
+"label" : "1YD00544",
+	"children" : [
+{
+	"name" : "B0032_SAMPLE",
+"label" : "3JVK369R"
+}
+	]
+}
+	]
+},
+{
+	"name" : "ENZYME_BUFFER_PLATE",
+"label" : "10000544",
+	"children" : [
+{
+	"name" : "WELL[90000511]",
+"label" : "90000511",
+	"children" : [
+{
+	"name" : "mcrRobotOutput",
+"label" : "4X4MKH89"
+}
+	]
+},
+{
+	"name" : "WELL[90000512]",
+"label" : "90000512",
+	"children" : [
+{
+	"name" : "J23100_SAMPLE",
+"label" : "RBK9BEEZ"
+}
+	]
+},
+{
+	"name" : "WELL[90000513]",
+"label" : "90000513",
+	"children" : [
+{
+	"name" : "E0030_SAMPLE",
+"label" : "N7UPVJY7"
+}
+	]
+},
+{
+	"name" : "WELL[90000514]",
+"label" : "90000514",
+	"children" : [
+{
+	"name" : "B0015_SAMPLE",
+"label" : "LNL75G00"
+}
+	]
+},
+{
+	"name" : "WELL[90000515]",
+"label" : "90000515",
+	"children" : [
+{
+	"name" : "34m1_SAMPLE",
+"label" : "UJJDPXXM"
+}
+	]
+}
+	]
+},
+{
+	"name" : "PLATE[1A000544]",
+"label" : "1A000544",
+	"children" : [
+{
+	"name" : "WELL[1AE00544]",
+"label" : "1AE00544",
+	"children" : [
+{
+	"name" : "mcrRobotOutput",
+"label" : "V4188U9J"
+}
+	]
+},
+{
+	"name" : "WELL[1AD00544]",
+"label" : "1AD00544",
+	"children" : [
+{
+	"name" : "B0034_SAMPLE",
+"label" : "H5GEXH6C"
+}
+	]
+},
+{
+	"name" : "WELL[1AA00544]",
+"label" : "1AA00544",
+	"children" : [
+{
+	"name" : "J23100_SAMPLE",
+"label" : "T9MD06M2"
+}
+	]
+},
+{
+	"name" : "WELL[1AC00544]",
+"label" : "1AC00544",
+	"children" : [
+{
+	"name" : "E0030_SAMPLE",
+"label" : "B0G9T0EU"
+}
+	]
+},
+{
+	"name" : "WELL[1AB00544]",
+"label" : "1AB00544",
+	"children" : [
+{
+	"name" : "B0015_SAMPLE",
+"label" : "KS62E04M"
+}
+	]
+}
+	]
+}
+	]
+},
+{
+	"name" : "STERILE_DIONIZED_WATER[B0000268]",
+"label" : "B0000268"
+},
+{
+	"name" : "TUBE_RACK[C0000343]",
+"label" : "C0000343"
+},
+{
+	"name" : "TUBE_RACK[B0000343]",
+"label" : "B0000343"
+},
+{
+	"name" : "DARK_ROOM",
+"label" : "00000191",
+	"children" : [
+{
+	"name" : "UV_LIGHT_BOX",
+"label" : "00000192"
+}
+	]
+},
+{
+	"name" : "NANODROP_ROOM",
+"label" : "00000018",
+	"children" : [
+{
+	"name" : "KIM_WIPES",
+"label" : "00000182"
+},
+{
+	"name" : "NANODROP_COMPUTER",
+"label" : "00000180"
+}
+	]
+},
+{
+	"name" : "JANOO",
+"label" : "00000014",
+	"children" : [
+{
+	"name" : "PREMADE_KAN_PLATES",
+"label" : "20000297",
+	"children" : [
+{
+	"name" : "PETRI_DISH[D0000363]",
+"label" : "D0000363"
+},
+{
+	"name" : "PETRI_DISH[E0000363]",
+"label" : "E0000363"
+},
+{
+	"name" : "PETRI_DISH[J0000363]",
+"label" : "J0000363"
+},
+{
+	"name" : "PETRI_DISH[K0000363]",
+"label" : "K0000363"
+},
+{
+	"name" : "PETRI_DISH[T0000363]",
+"label" : "T0000363"
+},
+{
+	"name" : "PETRI_DISH[F0000363]",
+"label" : "F0000363"
+},
+{
+	"name" : "PETRI_DISH[G0000363]",
+"label" : "G0000363"
+},
+{
+	"name" : "PETRI_DISH[L0000363]",
+"label" : "L0000363"
+},
+{
+	"name" : "PETRI_DISH[M0000363]",
+"label" : "M0000363"
+},
+{
+	"name" : "PETRI_DISH[R0000363]",
+"label" : "R0000363"
+},
+{
+	"name" : "PETRI_DISH[S0000363]",
+"label" : "S0000363"
+},
+{
+	"name" : "PETRI_DISH[H0000363]",
+"label" : "H0000363"
+},
+{
+	"name" : "PETRI_DISH[I0000363]",
+"label" : "I0000363"
+},
+{
+	"name" : "PETRI_DISH[N0000363]",
+"label" : "N0000363"
+},
+{
+	"name" : "PETRI_DISH[O0000363]",
+"label" : "O0000363"
+},
+{
+	"name" : "PETRI_DISH[40000363]",
+"label" : "40000363"
+},
+{
+	"name" : "PETRI_DISH[00000363]",
+"label" : "00000363"
+},
+{
+	"name" : "PETRI_DISH[30000363]",
+"label" : "30000363"
+},
+{
+	"name" : "PETRI_DISH[Q0000363]",
+"label" : "Q0000363"
+},
+{
+	"name" : "PETRI_DISH[P0000363]",
+"label" : "P0000363"
+},
+{
+	"name" : "PETRI_DISH[A0000363]",
+"label" : "A0000363"
+},
+{
+	"name" : "PETRI_DISH[C0000363]",
+"label" : "C0000363"
+},
+{
+	"name" : "PETRI_DISH[90000363]",
+"label" : "90000363"
+},
+{
+	"name" : "PETRI_DISH[60000363]",
+"label" : "60000363"
+},
+{
+	"name" : "PETRI_DISH[B0000363]",
+"label" : "B0000363"
+},
+{
+	"name" : "PETRI_DISH[80000363]",
+"label" : "80000363"
+},
+{
+	"name" : "PETRI_DISH[50000363]",
+"label" : "50000363"
+}
+	]
+},
+{
+	"name" : "BUNSEN_BURNER[00000178]",
+"label" : "00000178"
+},
+{
+	"name" : "HEATING_BLOCK[B0000176]",
+"label" : "B0000176"
+},
+{
+	"name" : "CENTRIFUGE[C0000169]",
+"label" : "C0000169"
+},
+{
+	"name" : "CENTRIFUGE[D0000169]",
+"label" : "D0000169"
+},
+{
+	"name" : "CENTRIFUGE[A0000169]",
+"label" : "A0000169"
+},
+{
+	"name" : "STRIKER[A0000128]",
+"label" : "A0000128"
+},
+{
+	"name" : "HEATING_BLOCK[C0000176]",
+"label" : "C0000176"
+},
+{
+	"name" : "CENTRIFUGE[00000169]",
+"label" : "00000169"
+},
+{
+	"name" : "WASTE_CONTAINER[C0000330]",
+"label" : "C0000330"
+},
+{
+	"name" : "WASTE_CONTAINER[00000330]",
+"label" : "00000330"
+},
+{
+	"name" : "SHAKING_INCUBATOR[A0000142]",
+"label" : "A0000142"
+},
+{
+	"name" : "SHAKING_INCUBATOR[00000142]",
+"label" : "00000142"
+},
+{
+	"name" : "WASTE_CONTAINER[A0000330]",
+"label" : "A0000330"
+},
+{
+	"name" : "CENTRIFUGE[B0000169]",
+"label" : "B0000169"
+},
+{
+	"name" : "BIOLINE_CELL",
+"label" : "00000146"
+},
+{
+	"name" : "WASTE_CONTAINER[B0000330]",
+"label" : "B0000330"
+},
+{
+	"name" : "PCR_TUBE_RACK[C0000912]",
+"label" : "C0000912"
+},
+{
+	"name" : "PCR_TUBE_RACK[B0000912]",
+"label" : "B0000912"
+},
+{
+	"name" : "PCR_TUBE_RACK[A0000912]",
+"label" : "A0000912"
+},
+{
+	"name" : "PCR_TUBE_RACK[00000912]",
+"label" : "00000912",
+	"children" : [
+{
+	"name" : "PCR_TUBE",
+"label" : "00000352",
+	"children" : [
+{
+	"name" : "MCR_OUTPUT",
+"label" : "6LZKVZV8"
+}
+	]
+}
+	]
+},
+{
+	"name" : "PCR_TUBES",
+"label" : "00000072",
+	"children" : [
+{
+	"name" : "PCR_TUBE[00000354]",
+"label" : "00000354"
+},
+{
+	"name" : "PCR_TUBE[00000357]",
+"label" : "00000357"
+},
+{
+	"name" : "PCR_TUBE[00000356]",
+"label" : "00000356"
+},
+{
+	"name" : "PCR_TUBE[00000359]",
+"label" : "00000359"
+},
+{
+	"name" : "PCR_TUBE[00000358]",
+"label" : "00000358"
+},
+{
+	"name" : "PCR_TUBE[00000361]",
+"label" : "00000361"
+},
+{
+	"name" : "PCR_TUBE[00000360]",
+"label" : "00000360"
+},
+{
+	"name" : "PCR_TUBE[90000362]",
+"label" : "90000362"
+},
+{
+	"name" : "PCR_TUBE[8B000362]",
+"label" : "8B000362"
+},
+{
+	"name" : "PCR_TUBE[8A000362]",
+"label" : "8A000362"
+},
+{
+	"name" : "PCR_TUBE[80000362]",
+"label" : "80000362"
+},
+{
+	"name" : "PCR_TUBE[60000362]",
+"label" : "60000362"
+},
+{
+	"name" : "PCR_TUBE[70000362]",
+"label" : "70000362"
+},
+{
+	"name" : "PCR_TUBE[00000355]",
+"label" : "00000355"
+},
+{
+	"name" : "PCR_TUBE[30000362]",
+"label" : "30000362"
+},
+{
+	"name" : "PCR_TUBE[00000364]",
+"label" : "00000364"
+},
+{
+	"name" : "PCR_TUBE[10000362]",
+"label" : "10000362"
+},
+{
+	"name" : "PCR_TUBE[00000362]",
+"label" : "00000362"
+},
+{
+	"name" : "PCR_TUBE[00000353]",
+"label" : "00000353"
+},
+{
+	"name" : "PCR_TUBE[40000362]",
+"label" : "40000362"
+},
+{
+	"name" : "PCR_TUBE[50000362]",
+"label" : "50000362"
+},
+{
+	"name" : "PCR_TUBE[20000362]",
+"label" : "20000362"
+}
+	]
+},
+{
+	"name" : "HEATING_BLOCK[A0000176]",
+"label" : "A0000176"
+},
+{
+	"name" : "HEATING_BLOCK[00000176]",
+"label" : "00000176"
+},
+{
+	"name" : "PCR_TUBE_RACK[D0000912]",
+"label" : "D0000912"
+},
+{
+	"name" : "BUNSEN_BURNER[A0000178]",
+"label" : "A0000178"
+},
+{
+	"name" : "INCUBATOR[A0000141]",
+"label" : "A0000141"
+},
+{
+	"name" : "INCUBATOR[00000141]",
+"label" : "00000141"
+},
+{
+	"name" : "STRIKER[B0000128]",
+"label" : "B0000128"
+},
+{
+	"name" : "TUBES",
+"label" : "00000289",
+	"children" : [
+{
+	"name" : "1.5_ML_T[10000291]",
+"label" : "10000291"
+},
+{
+	"name" : "1.5_ML_T[40000292]",
+"label" : "40000292"
+},
+{
+	"name" : "1.5_ML_T[30000292]",
+"label" : "30000292"
+},
+{
+	"name" : "1.5_ML_T[80000291]",
+"label" : "80000291"
+},
+{
+	"name" : "1.5_ML_T[70000291]",
+"label" : "70000291"
+},
+{
+	"name" : "1.5_ML_T[70000292]",
+"label" : "70000292"
+},
+{
+	"name" : "1.5_ML_T[80000292]",
+"label" : "80000292"
+},
+{
+	"name" : "1.5_ML_T[20000292]",
+"label" : "20000292"
+},
+{
+	"name" : "1.5_ML_T[10000292]",
+"label" : "10000292"
+},
+{
+	"name" : "1.5_ML_T[60000291]",
+"label" : "60000291"
+},
+{
+	"name" : "1.5_ML_T[50000291]",
+"label" : "50000291"
+},
+{
+	"name" : "1.5_ML_T[00000291]",
+"label" : "00000291"
+},
+{
+	"name" : "1.5_ML_T[20000291]",
+"label" : "20000291"
+},
+{
+	"name" : "1.5_ML_T[00000293]",
+"label" : "00000293"
+},
+{
+	"name" : "1.5_ML_T[90000291]",
+"label" : "90000291"
+},
+{
+	"name" : "1.5_ML_T[40000291]",
+"label" : "40000291"
+},
+{
+	"name" : "1.5_ML_T[30000291]",
+"label" : "30000291"
+},
+{
+	"name" : "1.5_ML_T[90000292]",
+"label" : "90000292"
+},
+{
+	"name" : "2_ML_T[00000052]",
+"label" : "00000052"
+},
+{
+	"name" : "2_ML_T[50000052]",
+"label" : "50000052"
+},
+{
+	"name" : "2_ML_T[60000052]",
+"label" : "60000052"
+},
+{
+	"name" : "1.5_ML_T[50000292]",
+"label" : "50000292"
+},
+{
+	"name" : "1.5_ML_T[60000292]",
+"label" : "60000292"
+},
+{
+	"name" : "2_ML_T[10000052]",
+"label" : "10000052"
+},
+{
+	"name" : "2_ML_T[20000052]",
+"label" : "20000052"
+},
+{
+	"name" : "2_ML_T[70000052]",
+"label" : "70000052"
+},
+{
+	"name" : "2_ML_T[80000052]",
+"label" : "80000052"
+},
+{
+	"name" : "0.5_ML_T[20000112]",
+"label" : "20000112"
+},
+{
+	"name" : "0.5_ML_T[10000112]",
+"label" : "10000112"
+},
+{
+	"name" : "2_ML_T[30000052]",
+"label" : "30000052"
+},
+{
+	"name" : "2_ML_T[40000052]",
+"label" : "40000052"
+},
+{
+	"name" : "2_ML_T[90000052]",
+"label" : "90000052"
+},
+{
+	"name" : "0.5_ML_T[00000112]",
+"label" : "00000112"
+},
+{
+	"name" : "0.5_ML_T[70000112]",
+"label" : "70000112"
+},
+{
+	"name" : "0.5_ML_T[80000112]",
+"label" : "80000112"
+},
+{
+	"name" : "0.5_ML_T[90000112]",
+"label" : "90000112"
+},
+{
+	"name" : "0.5_ML_T[00000113]",
+"label" : "00000113"
+},
+{
+	"name" : "0.5_ML_T[30000112]",
+"label" : "30000112"
+},
+{
+	"name" : "0.5_ML_T[40000112]",
+"label" : "40000112"
+},
+{
+	"name" : "0.5_ML_T[50000112]",
+"label" : "50000112"
+},
+{
+	"name" : "0.5_ML_T[60000112]",
+"label" : "60000112"
+}
+	]
+},
+{
+	"name" : "STRIKER[00000128]",
+"label" : "00000128"
+},
+{
+	"name" : "BUNSEN_BURNER[C0000178]",
+"label" : "C0000178"
+},
+{
+	"name" : "BUNSEN_BURNER[B0000178]",
+"label" : "B0000178"
+},
+{
+	"name" : "SOC_BROTH",
+"label" : "00000345"
+},
+{
+	"name" : "VORTEX[B0000040]",
+"label" : "B0000040"
+},
+{
+	"name" : "INCUBATOR[C0000141]",
+"label" : "C0000141"
+},
+{
+	"name" : "INCUBATOR[B0000141]",
+"label" : "B0000141"
+},
+{
+	"name" : "VORTEX[A0000040]",
+"label" : "A0000040"
+},
+{
+	"name" : "VORTEX[00000040]",
+"label" : "00000040"
+}
+	]
+},
+{
+	"name" : "TECAN",
+"label" : "B0000191"
+}
+	]
+},
+{
+	"name" : "P_2_vector3398358113657128E8_SAMPLE",
+"label" : "0QCA22R1"
+},
+{
+	"name" : "J23100_SAMPLE",
+"label" : "UE9SCXD7"
+},
+{
+	"name" : "E0030_SAMPLE",
+"label" : "Q729V0JL"
+},
+{
+	"name" : "B0015_SAMPLE",
+"label" : "DDARNBS7"
+},
+{
+	"name" : "J23100_test_SAMPLE",
+"label" : "CZQ6XCPB"
+}
+	]
+};
+
+
+//convert to json object
+var jsonStr = JSON.stringify(jsonTxt);
+var json = JSON.parse(jsonStr);
+	
+//---------------the following has changed----------------//
+var width = 5000,
+    height = 10000;
+var margin = {top: 50, right: 100, bottom: 100, left: 100};
+//--------------------------------------------------------//
+
+
+var i = 0,
+    duration = 450,
+    root;
+
+var tree = d3.layout.tree()
+    .size([height + margin.top, width]);
+
+var diagonal = d3.svg.diagonal()
+    .projection(function(d) { return [d.y, d.x]; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//var jsondata = new Array(); //store names
+var dataObj = new Array();  //store objects
+var labels = new Array();  //store labels
+
+  root = json;
+  root.x0 = height / 2;
+  root.y0 = 0;
+
+  countObj = 1;
+  countLabel = 1;
+  dataObj[0] = root;
+  labels[0] = root.label;
+  
+function collapse(d) {
+	
+  dataObj[countObj++] = d;
+  dataObj.length= countObj;
+	
+  labels[countLabel++] = d.label;
+  labels.length=countLabel;
+	
+  if (d.children) {
+    d._children = d.children;
+    d._children.forEach(collapse);
+    //d.children = null; /*uncomment to hide nodes*/
+  } 
+}
+
+root.children.forEach(collapse);
+update(root); 
+
+//d3.select(self.frameElement).style("height", height);
+
+var tooltip = d3.select("body")
+	.append("div")
+	.style("position", "absolute" )
+	.style("z-index", "10")
+	.style("visibility", "hidden")
+	.style("color","white") //what color do we want?
+	.style("background-color","black")
+	.text("")
+	.style("padding","0.5em");
+
+function update(source) {
+
+
+//ADD THE FOLLOWING TO THE PREVIOUS HTML//
+var levelWidth = [1];
+var childCount = function(level, n) {
+
+if(n.children && n.children.length > 0) {
+    if(levelWidth.length <= level + 1) levelWidth.push(0);
+
+    levelWidth[level+1] += n.children.length;
+    n.children.forEach(function(d) {
+      childCount(level + 1, d);
+    });
+  }
+};
+
+childCount(0, root);  
+var height = d3.max(levelWidth) * 20; // 20 pixels per line
+tree = tree.size([height, width]);
+//-----------------------------------------//
+
+
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+      links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 270; });
+
+
+  // Update the nodes…
+  var node = svg.selectAll("g.node")
+      .data(nodes, function(d) { return d.id || (d.id = ++i); })
+      .on("mouseover", fade(.1))
+      .on("mouseout", fade(1));
+     
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+      .on("click", click)
+      .on("mouseover", fade(.1))
+      .on("mouseout", fade(1));
+
+  nodeEnter.append("circle")
+	  .attr("dx", function(d) { return d.x; })
+      .attr("dy", function(d) { return d.y; })
+      .attr("r", 1e-6)
+      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
+    //  .on("mouseover", function() {return tooltip.style("visibility", "visible");})
+//	  .on("mousemove", function(d) {return tooltip.text(d.label).style("top", (event.pageY+20)+"px").style("left",(event.pageX+20)+"px");})
+//	  .on("mouseout", function() {return tooltip.style("visibility", "hidden");});
+	  .append("title")
+	  .text(function(d) { return "label=" + d.label; }); //has delays and disappears, use tooltip instead
+
+  nodeEnter.append("text")
+      .attr("dx", function(d) { return d.children || d._children ? -10 : 10; }) //firefox doesn't recognize the change in dx
+      .attr("dy", ".35em")
+      .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+      .text(function(d) { return d.name; })
+      .style("fill-opacity", 1e-6)
+      .on("mousedown", displayURLonClick)
+     // .on("mouseover", function() {return tooltip.style("visibility", "visible");})
+//	  .on("mousemove", function(d) {return tooltip.text(d.label).style("top", (event.pageY+20)+"px").style("left",(event.pageX+20)+"px");})
+//	  .on("mouseout", function() {return tooltip.style("visibility", "hidden");});
+      .append("title")
+	  .text(function(d) { return "label=" + d.label; }); //has delays and disappears, use tooltip instead
+
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+      .duration(duration)
+      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+  nodeUpdate.select("circle")
+      .attr("r", 4.5);
+      //.style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; }); //comment to keep circle with children filled-in
+
+  nodeUpdate.select("text")
+      .style("fill-opacity", 1);
+
+  // Transition exiting nodes to the parent's new position.
+  var nodeExit = node.exit().transition()
+      .duration(duration)
+      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+      .remove();
+
+  nodeExit.select("circle")
+      .attr("r", 1e-6);
+
+  nodeExit.select("text")
+      .style("fill-opacity", 1e-6);
+
+  // Update the links…
+  var link = svg.selectAll("path.link")
+      .data(links, function(d) { return d.target.id; });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert("path", "g")
+      .attr("class", "link")
+      .attr("d", function(d) {
+        var o = {x: source.x0, y: source.y0};
+        return diagonal({source: o, target: o});
+      });
+
+  // Transition links to their new position.
+  link.transition()
+      .duration(duration)
+      .attr("d", diagonal);
+
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+      .duration(duration)
+      .attr("d", function(d) {
+        var o = {x: source.x, y: source.y};
+        return diagonal({source: o, target: o});
+      })
+      .remove();
+
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+    d.x0 = d.x;
+    d.y0 = d.y;
+  });
+
+  //determine if two nodes are neighbors
+  var linkedByIndex = {};
+  links.forEach(function(d) {
+     linkedByIndex[d.source.index + "," + d.target.index] = 1;
+  });
+
+  function isConnected(a, b) {
+     return linkedByIndex[a.index + "," + b.index] || linkedByIndex[b.index + "," + a.index] || a.index == b.index;
+  }
+
+  /**fading the links**/
+  function fade(opacity) {
+     return function(d) {
+         node.style("stroke-opacity", function(o) {
+             thisOpacity = isConnected(d, o) ? 1 : opacity;
+             this.setAttribute('fill-opacity', thisOpacity);
+             return thisOpacity;
+         });
+
+         link.style("stroke-opacity", function(o) {
+             return o.source === d || o.target === d ? 1 : opacity;
+         });
+     };
+  }
+}
+
+
+// Toggle children on click.
+function click(d) {
+
+  if (d.children) {
+    d._children = d.children;
+    d.children = null;
+  } else {
+    d.children = d._children;
+    d._children = null;
+  }
+  update(d);
+}
+
+//function traces back to the root
+function getParent(d) {
+   if (d.parent == undefined) {
+      return d;
+   } 
+   else {
+      var newParent = d.parent;
+      var URL = newParent.name;
+      if (newParent.parent != undefined) {
+         var newParent = getParent(newParent); 
+      }
+      arrayNode[countNodes++] = URL;
+      return arrayNode;
+   }
+}
+
+/*
+//make uppercase when typed into search box
+function upperCase() {
+  var x=document.getElementById("search"); 
+  x.value=x.value.toUpperCase(); //even if user enters lowercase, the name will still match up if node exists
+  return x.value;
+}
+*/
+
+//get the URL of the resource on click
+function displayURLonClick(d) {
+
+   d3.select("body").selectAll("li")
+     .remove();
+
+   d3.select("body").select("div").selectAll("label")
+     .remove();
+
+   countNodes = 0; 
+   arrayNode = new Array();
+   arrayNode = getParent(d);
+   length = arrayNode.length;
+   var i=0;
+   var getURL="";
+   while (i<length) {
+     getURL = getURL + arrayNode[i++] + "." ; /*what do we wanna see between the resources when displaying the URL?*/
+   }
+   var fullPath = new Array();
+       fullPath[0] = getURL + d.name; //if have it as a string, prints letter by letter
+
+   d3.select("body").select("div").selectAll("p") 
+    .data(fullPath)
+    .enter().append("li")
+    .text(function(d) { return d;});
+    //.on("mouseover", function(d) { return d3.select(this).style("color", "red")})
+//    .on("mouseout", function(d) { return d3.select(this).style("color", "black")});
+}
+
+//different than displayURLonClick since there can be multiple search results
+//compute the URL of each search result
+function getURLnames(d) {
+
+   countNodes = 0; 
+   arrayNode = new Array();
+   arrayNode = getParent(d);
+   length = arrayNode.length;
+   var i=0;
+   var getURL="";
+   while (i<length) {
+     getURL = getURL + arrayNode[i++] + "." ; /*what do we wanna see between the resources when displaying the URL?*/
+   }
+   var fullPath = getURL + d.name;
+   
+   return fullPath;
+}
+
+//search for user input/find matching data/compute URLs
+function searchByName(d) {
+
+  //clear the list before each search
+  d3.select("body").select("div").selectAll("label")
+    .remove();
+
+  d3.select("body").selectAll("li")
+     .remove();
+
+  var x=document.getElementById("search"); // = new RegExp(upperCase(),"g");  //get x.value
+  var input = x.value;
+  var dataName = new Array(); //matched resource names
+  var allURLs = new Array();  //URLs
+  var resourceFound = new Array();
+
+  count = 0;
+  countMatch = 0;
+
+  for (var i in dataObj) {
+     dataName[i] = dataObj[i].name; //get the nodes
+     var strJSONwith_ = dataName[i]; //original name format with underscores
+     var strJSON = strJSONwith_.replace(new RegExp("_","gm"),""); //get rid of underscores
+     var strJSONwithSpace = strJSONwith_.replace(new RegExp("_","gm")," "); //replace underscores with space
+
+     if ((strJSONwith_.match(new RegExp(input, "gi"))) || (strJSONwithSpace.match(new RegExp(input, "gi"))) || (strJSON.match(new RegExp(input, "gi")))) {
+        d = dataObj[i];
+        resourceFound[count++] = d.name;
+        allURLs[countMatch++] = getURLnames(d);
+     }
+   }
+///*
+  d3.select("body").select("div").selectAll("p")
+    .data(allURLs)
+    .enter().append("li").append("label")
+       .attr("for",function(d,i){ return i; })
+       .text(function(d) { return d;});
+       //.on("mouseover", function(d) { return d3.select(this).style("color", "red")})
+//       .on("mouseout", function(d) { return d3.select(this).style("color", "black")})
+//       .on("click", function(d) { return d3.select(this).data(allURLs)});
+    
+//*/
+
+/*
+  d3.select("div").selectAll("input") //.selectAll("p")
+    .data(resourceFound)
+	.enter().append("label")
+	    .text(function(d) { return d;})
+	.append("input")
+	    .text(function(d) { return d;})
+	    .attr("class","unchecked")
+		.attr("type","checkbox")
+		.attr("id",function(d,i) { return i;})
+		.on("click", 
+	function(d) { 
+	   if (d3.select(this).attr("class") === "unchecked") {
+	      d3.select(this).attr("class","checked");
+	   }
+	   else {
+	      d3.select(this).attr("class","unchecked");
+	   }
+	});
+//*/		
+
+	    /*		
+  d3.select("form").selectAll("input") //.selectAll("p")
+    .data(allURLs)
+	.enter().append("label")
+	    .text(function(d) { return d;})
+	    .append("input")
+	    .text(function(d) { return d;})
+		.attr("type","checkbox")
+		.attr("value",function(d,i) { return i;})
+				.append("br");  
+*/
+
+  //clear the list if no match found - WORKS 
+  if (countMatch == 0) { 
+     d3.select("body").selectAll("li")
+     .remove()
+  }
+}
+
+
+/***search by label***/
+function searchByLabel()
+{
+  var resourceFound="";
+  //clear the list before each search
+  d3.select("body").selectAll("li")
+    .remove();
+
+  var x = document.getElementById("search");  //get x.value
+  var input = x.value;
+  
+  for(var i=0; i<labels.length; i++) {
+    if (input == labels[i]) { //if match FOUND
+       resourceFound = dataObj[i].name; 
+       var index = i;
+    }
+  }
+      
+  var path="";
+  d = dataObj[index];
+  path=displayURLonClick(d);
+} 
+
+
+
+/***OLD METHOD***/
+
+//allow the user to scroll around the windown to view the whole graph
+/*
+if (document.body && document.body.offsetWidth) {
+ width = document.body.offsetWidth;
+ height = document.body.offsetHeight;
+}
+
+if (document.compatMode=='CSS1Compat' &&
+    document.documentElement &&
+    document.documentElement.offsetWidth ) {
+ width = document.documentElement.offsetWidth;
+ height = document.documentElement.offsetHeight;
+}
+
+if (window.innerWidth && window.innerHeight) {
+ width = window.innerWidth;
+ height = window.innerHeight;
+}
+//*/
+
+
+//pop up message with user prompt box
+function promptUserForURL()
+{
+   var x,y;
+
+   var arg = searchNode(); //matched resources
+   var arg2 = getURLs();
+   var theURL="";
+
+   var resource=prompt("Here are the matching resources: " + "\n\n" + arg + "\n\n" + "Type in the name of the resource to see its URL", "");
+   resource=resource.toUpperCase();
+
+   if (resource!=null)
+   {
+     for (var i in arg) {
+         if (resource == arg[i]) {
+             theURL = arg2[i];
+         }
+     }  
+     x=theURL + "\n";
+     document.getElementById("url").innerHTML=x;
+     document.getElementById("url").style.color="red";
+   }
+
+
+   return resource;
+}
+</script>
+</body>
+</html>
