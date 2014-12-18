@@ -2612,9 +2612,6 @@ tree = tree.size([height, width]);
       .attr("dy", function(d) { return d.y; })
       .attr("r", 1e-6)
       .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
-    //  .on("mouseover", function() {return tooltip.style("visibility", "visible");})
-//	  .on("mousemove", function(d) {return tooltip.text(d.label).style("top", (event.pageY+20)+"px").style("left",(event.pageX+20)+"px");})
-//	  .on("mouseout", function() {return tooltip.style("visibility", "hidden");});
 	  .append("title")
 	  .text(function(d) { return "label=" + d.label; }); //has delays and disappears, use tooltip instead
 
@@ -2625,9 +2622,6 @@ tree = tree.size([height, width]);
       .text(function(d) { return d.name; })
       .style("fill-opacity", 1e-6)
       .on("mousedown", displayURLonClick)
-     // .on("mouseover", function() {return tooltip.style("visibility", "visible");})
-//	  .on("mousemove", function(d) {return tooltip.text(d.label).style("top", (event.pageY+20)+"px").style("left",(event.pageX+20)+"px");})
-//	  .on("mouseout", function() {return tooltip.style("visibility", "hidden");});
       .append("title")
 	  .text(function(d) { return "label=" + d.label; }); //has delays and disappears, use tooltip instead
 
@@ -2743,15 +2737,6 @@ function getParent(d) {
    }
 }
 
-/*
-//make uppercase when typed into search box
-function upperCase() {
-  var x=document.getElementById("search"); 
-  x.value=x.value.toUpperCase(); //even if user enters lowercase, the name will still match up if node exists
-  return x.value;
-}
-*/
-
 //get the URL of the resource on click
 function displayURLonClick(d) {
 
@@ -2777,8 +2762,6 @@ function displayURLonClick(d) {
     .data(fullPath)
     .enter().append("li")
     .text(function(d) { return d;});
-    //.on("mouseover", function(d) { return d3.select(this).style("color", "red")})
-//    .on("mouseout", function(d) { return d3.select(this).style("color", "black")});
 }
 
 //different than displayURLonClick since there can be multiple search results
@@ -2836,9 +2819,6 @@ function searchByName(d) {
     .enter().append("li").append("label")
        .attr("for",function(d,i){ return i; })
        .text(function(d) { return d;});
-       //.on("mouseover", function(d) { return d3.select(this).style("color", "red")})
-//       .on("mouseout", function(d) { return d3.select(this).style("color", "black")})
-//       .on("click", function(d) { return d3.select(this).data(allURLs)});
     
 
   //clear the list if no match found - WORKS 
