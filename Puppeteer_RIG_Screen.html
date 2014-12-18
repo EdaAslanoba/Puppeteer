@@ -2830,7 +2830,7 @@ function searchByName(d) {
         allURLs[countMatch++] = getURLnames(d);
      }
    }
-///*
+
   d3.select("body").select("div").selectAll("p")
     .data(allURLs)
     .enter().append("li").append("label")
@@ -2840,40 +2840,6 @@ function searchByName(d) {
 //       .on("mouseout", function(d) { return d3.select(this).style("color", "black")})
 //       .on("click", function(d) { return d3.select(this).data(allURLs)});
     
-//*/
-
-/*
-  d3.select("div").selectAll("input") //.selectAll("p")
-    .data(resourceFound)
-	.enter().append("label")
-	    .text(function(d) { return d;})
-	.append("input")
-	    .text(function(d) { return d;})
-	    .attr("class","unchecked")
-		.attr("type","checkbox")
-		.attr("id",function(d,i) { return i;})
-		.on("click", 
-	function(d) { 
-	   if (d3.select(this).attr("class") === "unchecked") {
-	      d3.select(this).attr("class","checked");
-	   }
-	   else {
-	      d3.select(this).attr("class","unchecked");
-	   }
-	});
-//*/		
-
-	    /*		
-  d3.select("form").selectAll("input") //.selectAll("p")
-    .data(allURLs)
-	.enter().append("label")
-	    .text(function(d) { return d;})
-	    .append("input")
-	    .text(function(d) { return d;})
-		.attr("type","checkbox")
-		.attr("value",function(d,i) { return i;})
-				.append("br");  
-*/
 
   //clear the list if no match found - WORKS 
   if (countMatch == 0) { 
@@ -2905,30 +2871,6 @@ function searchByLabel()
   d = dataObj[index];
   path=displayURLonClick(d);
 } 
-
-
-
-/***OLD METHOD***/
-
-//allow the user to scroll around the windown to view the whole graph
-/*
-if (document.body && document.body.offsetWidth) {
- width = document.body.offsetWidth;
- height = document.body.offsetHeight;
-}
-
-if (document.compatMode=='CSS1Compat' &&
-    document.documentElement &&
-    document.documentElement.offsetWidth ) {
- width = document.documentElement.offsetWidth;
- height = document.documentElement.offsetHeight;
-}
-
-if (window.innerWidth && window.innerHeight) {
- width = window.innerWidth;
- height = window.innerHeight;
-}
-//*/
 
 
 //pop up message with user prompt box
